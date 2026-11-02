@@ -1,0 +1,20 @@
+const ROOT="https://raw.githubusercontent.com/ChefToney/nani-bear-dress-up-studio/main/";
+const url=n=>ROOT+encodeURIComponent(n);
+const backgrounds=["Background Beach Day.PNG","Background Fashion Show.PNG","Background Lovely Park.PNG","Background My Room.PNG","Background Palace View.PNG","BackgroundThe Mall.PNG","Background beach.jpg","Background stage.jpg"];
+const assets=["Bell bottoms.PNG","Blue sneakers.PNG","Cute dress.PNG","Flow skirt.PNG","Handbag.PNG","Librarian glasses.PNG","Lovely dress.PNG","Pink bow.PNG","Pink heels.PNG","Pink sneakers.PNG","Princess tiara.PNG","Purple bow.PNG","Queen crown.PNG","Short heels.PNG","Sneakers.PNG","Star glasses.PNG","Sweat shirt.PNG","Teal bow.PNG"];
+const tracks=["KA_HU_TI PT2.mp3","KA_HU_TI.mp3","Move_Pose.mp3","Move_Pose_Stop.mp3","Nani_Bear_Runway(1).mp3","Pah! PT2.mp3","Pah!.mp3"];
+const $=id=>document.getElementById(id), music=$("music"); let trackOrder=[],trackIndex=0,activeCategory="All",worn=new Set();
+function label(s){return s.replace(/\.[^.]+$/,"").replace(/^Background ?/i,"").replace(/_/g," ").replace(/\(1\)/g,"").trim()}
+function category(s){const n=s.toLowerCase();if(n.includes("bow")||n.includes("tiara")||n.includes("crown"))return "Hair";if(n.includes("shoe")||n.includes("heels")||n.includes("sneaker"))return "Shoes";if(n.includes("glasses"))return "Glasses";if(n.includes("handbag"))return "Bags";if(n.includes("dress")||n.includes("skirt")||n.includes("bell bottoms")||n.includes("sweat shirt"))return "Clothes";return "Accessories"}
+function renderBackgrounds(){const box=$("backgrounds"); backgrounds.forEach((f,i)=>{const b=document.createElement("button");b.className="background-choice"+(!i?" active":"");b.innerHTML='<img alt=""><span>'+label(f)+'</span>';b.querySelector("img").src=url(f);b.onclick=()=>{box.querySelectorAll("button").forEach(x=>x.classList.remove("active"));b.classList.add("active");$("scene").src=url(f)};box.append(b)});$("scene").src=url(backgrounds[0])}
+function renderCategories(){const cats=["All",...new Set(assets.map(category))];const box=$("categories");cats.forEach(c=>{const b=document.createElement("button");b.className="category"+(c==="All"?" active":"");b.textContent=c;b.onclick=()=>{activeCategory=c;box.querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b));renderItems()};box.append(b)})}
+function renderItems(){const box=$("items");box.innerHTML="";assets.filter(f=>activeCategory==="All"||category(f)===activeCategory).forEach(f=>{const b=document.createElement("button");b.className="item-choice"+(worn.has(f)?" active":"");b.innerHTML='<img alt=""><span>'+label(f)+'</span>';b.querySelector("img").src=url(f);b.onclick=()=>{worn.has(f)?worn.delete(f):worn.add(f);b.classList.toggle("active",worn.has(f));renderWorn()};box.append(b)})}
+function renderWorn(){const layer=$("characterLayer");layer.innerHTML="";const base=document.createElement("img");base.src=url("Nani Bear Base model.PNG");base.alt="Nani Bear";layer.append(base);worn.forEach(f=>{const im=document.createElement("img");im.src=url(f);im.alt=label(f);layer.append(im)})}
+function shuffle(){trackOrder=[...tracks].sort(()=>Math.random()-.5);trackIndex=0}
+function loadTrack(){music.src=url(trackOrder[trackIndex]);music.play().then(()=>$("playPause").textContent="⏸").catch(()=>{$("playPause").textContent="▶"})}
+function next(){trackIndex=(trackIndex+1)%trackOrder.length;loadTrack()}
+$("startBtn").onclick=()=>{$("intro").hidden=true;$("studio").hidden=false;shuffle();loadTrack();renderBackgrounds();renderCategories();renderItems();renderWorn()};
+$("nextTrack").onclick=next;$("prevTrack").onclick=()=>{trackIndex=(trackIndex-1+trackOrder.length)%trackOrder.length;loadTrack()};
+$("playPause").onclick=()=>{if(music.paused){music.play();$("playPause").textContent="⏸"}else{music.pause();$("playPause").textContent="▶"}};
+$("muteBtn").onclick=()=>{music.muted=!music.muted;$("muteBtn").textContent=music.muted?"🔇":"🔊"};
+music.addEventListener("ended",next);$("resetBtn").onclick=()=>{worn.clear();renderItems();renderWorn()};
