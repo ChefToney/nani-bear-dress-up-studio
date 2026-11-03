@@ -58,7 +58,8 @@ function unlockFx(){
  const AudioCtx=window.AudioContext||window.webkitAudioContext;
  if(!AudioCtx)return;
  if(!fxContext)fxContext=new AudioCtx();
- if(fxContext.state==="suspended")fxContext.resume().then(()=>playFx("sparkle")).catch(()=>{});\n else playFx("sparkle");
+ if(fxContext.state==="suspended")fxContext.resume().then(()=>playFx("sparkle")).catch(()=>{});
+ else playFx("sparkle");
 }
 function playFx(kind="tap"){
  if(!fxEnabled||!fxContext||fxContext.state!=="running")return;
