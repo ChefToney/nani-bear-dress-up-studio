@@ -54,31 +54,52 @@ const tracks=["KA_HU_TI PT2.mp3","KA_HU_TI.mp3","Move_Pose.mp3","Move_Pose_Stop.
 const $=id=>document.getElementById(id), music=$("music");
 let trackOrder=[],trackIndex=0,activeCategory="All",worn=new Map(),wornColors=new Map(),selectedTarget=null,dragState=null,justDragged=false;
 let fxContext=null,fxEnabled=true;
-function unlockFx(){
+function getFxContext(){
  const AudioCtx=window.AudioContext||window.webkitAudioContext;
- if(!AudioCtx)return;
+ if(!AudioCtx)return null;
  if(!fxContext)fxContext=new AudioCtx();
- if(fxContext.state==="suspended")fxContext.resume().then(()=>playFx("sparkle")).catch(()=>{});
- else playFx("sparkle");
+ return fxContext;
 }
-function playFx(kind="tap"){
- if(!fxEnabled||!fxContext||fxContext.state!=="running")return;
- const now=fxContext.currentTime;
+function unlockFx(){
+ const ctx=getFxContext();if(!ctx)return;
+ if(ctx.state!=="running"){
+  const resumed=ctx.resume();
+  if(resumed&&typeof resumed.then==="function")resumed.then(()=>playFx("sparkle")).catch(()=>{});
+ }else playFx("sparkle");
+}
+function scheduleFx(kind,ctx){
+ if(!fxEnabled||!ctx||ctx.state!=="running")return;
+ const now=ctx.currentTime;
  const patterns={
-  tap:[[520,0,.045,"sine",.035]],
-  pop:[[420,0,.07,"triangle",.055],[690,.045,.085,"sine",.035]],
-  sparkle:[[880,0,.10,"sine",.045],[1175,.075,.12,"sine",.035],[1568,.15,.16,"sine",.025]],
-  bling:[[1046,0,.09,"sine",.045],[1568,.08,.14,"sine",.035]]
+  tap:[[520,0,.065,"sine",.075]],
+  pop:[[420,0,.09,"triangle",.09],[690,.05,.11,"sine",.065]],
+  sparkle:[[880,0,.12,"sine",.075],[1175,.08,.14,"sine",.06],[1568,.16,.18,"sine",.05]],
+  bling:[[1046,0,.11,"sine",.075],[1568,.09,.16,"sine",.06]]
  };
  (patterns[kind]||patterns.tap).forEach(([hz,delay,duration,wave,volume])=>{
-  const osc=fxContext.createOscillator(),gain=fxContext.createGain();
-  osc.type=wave;osc.frequency.setValueAtTime(hz,now+delay);
-  gain.gain.setValueAtTime(.0001,now+delay);
-  gain.gain.exponentialRampToValueAtTime(volume,now+delay+.012);
-  gain.gain.exponentialRampToValueAtTime(.0001,now+delay+duration);
-  osc.connect(gain);gain.connect(fxContext.destination);
-  osc.start(now+delay);osc.stop(now+delay+duration+.015);
+  try{
+   const osc=ctx.createOscillator(),gain=ctx.createGain();
+   osc.type=wave;osc.frequency.setValueAtTime(hz,now+delay);
+   gain.gain.setValueAtTime(.0001,now+delay);
+   gain.gain.exponentialRampToValueAtTime(volume,now+delay+.012);
+   gain.gain.exponentialRampToValueAtTime(.0001,now+delay+duration);
+   osc.connect(gain);gain.connect(ctx.destination);
+   osc.start(now+delay);osc.stop(now+delay+duration+.02);
+  }catch(e){console.warn("Sound effect could not play:",e)}
  });
+}
+function playFx(kind="tap"){
+ if(!fxEnabled)return;
+ let ctx;
+ try{ctx=getFxContext()}catch(e){return}
+ if(!ctx)return;
+ if(ctx.state==="running"){scheduleFx(kind,ctx);return}
+ // iOS Safari may suspend Web Audio between touches. Resume on the
+ // interaction itself, then schedule the requested effect.
+ try{
+  const resumed=ctx.resume();
+  if(resumed&&typeof resumed.then==="function")resumed.then(()=>scheduleFx(kind,ctx)).catch(()=>{});
+ }catch(e){console.warn("Sound effects unavailable:",e)}
 }
 
 function category(file){
