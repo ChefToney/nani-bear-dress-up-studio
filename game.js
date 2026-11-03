@@ -103,11 +103,12 @@ function slot(file){
 function label(s){return s.replace(/^\s+/,"").replace(/\.[^.]+$/,"").replace(/^Background ?/i,"").replace(/_/g," ").trim()}
 function equip(file){
  const target=slot(file);
- if(worn.get(target)===file)worn.delete(target);
+ if(worn.get(target)===file){worn.delete(target);wornColors.delete(target);if(selectedTarget===target)selectedTarget=null}
  else{
+  if(worn.has(target))wornColors.delete(target);
   if(target==="dress"){worn.delete("top");worn.delete("bottoms")}
   if(target==="top"||target==="bottoms")worn.delete("dress");
-  worn.set(target,file);
+  worn.set(target,file);selectedTarget=target;
  }
  // The magic happens exactly where the outfit changes: around Nani.
  const stage=$("stage"),r=stage.getBoundingClientRect();
