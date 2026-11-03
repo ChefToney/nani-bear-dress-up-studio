@@ -10,3 +10,32 @@
 .drag-ghost img{width:44px;height:44px;object-fit:contain}
 
 .asset-error{position:absolute;z-index:30;left:8px;right:8px;top:8px;padding:10px 12px;border-radius:10px;background:#fff0f0;color:#8b1d1d;border:1px solid #d66;font-size:12px;font-weight:800;overflow-wrap:anywhere;pointer-events:none}.scene-error{top:auto;bottom:8px}.asset-missing{border-color:#d66!important;color:#8b1d1d!important}
+
+
+/* iPhone single-screen studio: keep Nani visible beside the outfit picker */
+@media(max-width:760px){
+  html,body{height:100%;overflow:hidden}
+  .studio{height:100svh;min-height:0;padding:8px;display:flex;flex-direction:column;overflow:hidden}
+  .studio header{flex:0 0 auto;flex-wrap:nowrap;gap:6px;margin-bottom:8px;min-width:0}
+  .studio header .eyebrow{display:none}
+  .studio h1{font-size:clamp(.78rem,3.4vw,1.05rem);line-height:1.15}
+  .music-controls{gap:3px;flex-shrink:0}
+  .music-controls button{padding:7px 8px;border-radius:9px;font-size:.85rem}
+  .workspace{flex:1;min-height:0;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:8px}
+  .stage-wrap{order:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
+  .stage{width:100%;height:auto;aspect-ratio:4/5;min-height:0;max-height:58svh}
+  .hint{font-size:.68rem;line-height:1.2;margin:6px 0 0}
+  .sidebar{order:2;min-height:0;max-height:none;overflow:hidden;padding:8px;border-radius:14px;display:flex;flex-direction:column;gap:5px}
+  .sidebar h2{font-size:.78rem;margin:2px 0 4px}
+  .background-list{display:flex;flex:0 0 auto;overflow-x:auto;gap:5px;padding-bottom:3px;scrollbar-width:thin}
+  .background-choice{flex:0 0 70px;min-width:70px;padding:4px;border-radius:8px}
+  .background-choice span{font-size:.58rem;line-height:1.1}
+  .sidebar hr{flex:0 0 auto;margin:3px 0}
+  .category-list{flex:0 0 auto;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;gap:4px;margin:0;padding-bottom:4px;scrollbar-width:thin}
+  .category{flex:0 0 auto;padding:6px 8px;font-size:.68rem;white-space:nowrap}
+  .item-list{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;grid-template-columns:repeat(3,minmax(0,1fr));align-content:start;gap:5px;padding:1px 2px 5px;overscroll-behavior:contain}
+  .item-choice{min-width:0;padding:4px;border-radius:9px}
+  .item-choice img{width:100%;height:auto;aspect-ratio:1;object-fit:contain}
+  .item-choice span{font-size:.56rem;line-height:1.1;min-height:1.2em}
+  .reset{flex:0 0 auto;margin-top:2px;padding:7px;font-size:.72rem}
+}
