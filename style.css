@@ -8,3 +8,5 @@
 .item-choice img{pointer-events:none}
 .drag-ghost{position:fixed;z-index:9999;left:0;top:0;transform:translate(-50%,-50%);pointer-events:none;background:#fff0fb;border:2px solid #d64fba;border-radius:14px;padding:7px 10px;display:flex;align-items:center;gap:8px;box-shadow:0 8px 24px #51244f44;font-size:.8rem;font-weight:800;color:#642e61;white-space:nowrap}
 .drag-ghost img{width:44px;height:44px;object-fit:contain}
+
+.asset-error{position:absolute;z-index:30;left:8px;right:8px;top:8px;padding:10px 12px;border-radius:10px;background:#fff0f0;color:#8b1d1d;border:1px solid #d66;font-size:12px;font-weight:800;overflow-wrap:anywhere;pointer-events:none}.scene-error{top:auto;bottom:8px}.asset-missing{border-color:#d66!important;color:#8b1d1d!important}
