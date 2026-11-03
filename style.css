@@ -57,3 +57,39 @@
   .item-list{grid-template-columns:repeat(2,minmax(0,1fr))}
   .background-choice{flex-basis:62px;min-width:62px}
 }
+
+
+/* Revised iPhone layout: full-width character stage with outfit picker floating inside it */
+@media(max-width:760px){
+  .studio{height:100svh;min-height:0;padding:8px;display:flex;flex-direction:column;overflow:hidden}
+  .studio header{flex:0 0 auto;flex-wrap:nowrap;gap:5px;margin:0 0 6px;min-width:0}
+  .studio header .eyebrow{display:none}
+  .studio h1{font-size:clamp(.78rem,3.5vw,1.05rem);line-height:1.1}
+  .music-controls{gap:3px;flex-shrink:0}
+  .music-controls button{padding:6px 7px;font-size:.8rem}
+  .workspace{position:relative;display:block;flex:1;min-height:0;width:100%;overflow:hidden}
+  .stage-wrap{position:absolute;inset:0;display:block;min-width:0}
+  .stage{width:100%;height:100%;max-height:none;min-height:0;aspect-ratio:auto;border-radius:16px}
+  .character-layer img{height:66%;max-width:88%;bottom:35%}
+  .hint{display:none}
+  .sidebar{
+    position:absolute;z-index:40;left:7px;right:7px;bottom:7px;
+    width:auto;height:38%;max-height:38%;min-height:0;overflow:hidden;
+    padding:7px 8px;border:1px solid #e8b5df;border-radius:15px;
+    background:rgba(255,248,253,.96);backdrop-filter:blur(8px);
+    display:flex;flex-direction:column;gap:4px;
+    box-shadow:0 3px 18px #54204b30;
+  }
+  .sidebar h2{font-size:.72rem;margin:1px 0 3px}
+  .background-list{display:flex;flex:0 0 auto;overflow-x:auto;gap:5px;padding-bottom:2px}
+  .background-choice{flex:0 0 58px;min-width:58px;padding:3px;border-radius:8px}
+  .background-choice span{font-size:.54rem;line-height:1}
+  .sidebar hr{flex:0 0 auto;margin:2px 0}
+  .category-list{display:flex;flex:0 0 auto;flex-wrap:nowrap;overflow-x:auto;gap:4px;margin:0;padding-bottom:3px}
+  .category{flex:0 0 auto;padding:5px 7px;font-size:.64rem;white-space:nowrap}
+  .item-list{display:grid;flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;grid-template-columns:repeat(4,minmax(0,1fr));align-content:start;gap:4px;padding:1px 2px 4px}
+  .item-choice{min-width:0;padding:3px;border-radius:8px}
+  .item-choice img{width:100%;height:auto;aspect-ratio:1;object-fit:contain}
+  .item-choice span{font-size:.52rem;line-height:1.05}
+  .reset{flex:0 0 auto;margin:1px 0 0;padding:5px;font-size:.65rem}
+}
