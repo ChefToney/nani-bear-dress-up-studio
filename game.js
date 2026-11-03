@@ -52,7 +52,7 @@ const assets=[
 
 const tracks=["KA_HU_TI PT2.mp3","KA_HU_TI.mp3","Move_Pose.mp3","Move_Pose_Stop.mp3","Nani_Bear_Runway(1).mp3","Pah! PT2.mp3","Pah!.mp3"];
 const $=id=>document.getElementById(id), music=$("music");
-let trackOrder=[],trackIndex=0,activeCategory="All",worn=new Map(),dragState=null,justDragged=false;
+let trackOrder=[],trackIndex=0,activeCategory="All",worn=new Map(),wornColors=new Map(),selectedTarget=null,dragState=null,justDragged=false;
 let fxContext=null,fxEnabled=true;
 function unlockFx(){
  const AudioCtx=window.AudioContext||window.webkitAudioContext;
@@ -164,12 +164,44 @@ function renderItems(){
   b.addEventListener("pointerdown",e=>beginDrag(e,f,b));box.append(b);
  });
 }
+function hexHue(hex){
+ const r=parseInt(hex.slice(1,3),16)/255,g=parseInt(hex.slice(3,5),16)/255,b=parseInt(hex.slice(5,7),16)/255;
+ const max=Math.max(r,g,b),min=Math.min(r,g,b),d=max-min;let h=0;
+ if(d){if(max===r)h=((g-b)/d)%6;else if(max===g)h=(b-r)/d+2;else h=(r-g)/d+4;h*=60}
+ return (h+360)%360;
+}
+function tintFilter(color){return "grayscale(1) sepia(1) saturate(5) hue-rotate("+Math.round(hexHue(color)-35)+"deg)"}
+function selectWorn(target){
+ selectedTarget=target;const file=worn.get(target),color=wornColors.get(target);
+ $("selectedLabel").textContent=file?label(file):"Tap something Nani is wearing";
+ $("selectedColor").disabled=!file;$("clearColor").disabled=!file;
+ $("selectedColor").value=color||"#ff70c8";
+ $("characterLayer").querySelectorAll(".wearable").forEach(img=>img.classList.toggle("selected-wearable",img.dataset.target===target));
+}
+function setWornColor(color){
+ if(!selectedTarget||!worn.has(selectedTarget))return;
+ wornColors.set(selectedTarget,color);
+ const img=$("characterLayer").querySelector('[data-target="'+selectedTarget+'"]');
+ if(img)img.style.filter=tintFilter(color);
+}
+function renderColorSwatches(){
+ const colors=["#ff70c8","#ff3f63","#ff9f43","#ffd84d","#8bd65a","#32c7ad","#45a5ff","#7864e8","#b66be8","#9b6848","#24212b","#ffffff"];
+ const box=$("colorSwatches");box.innerHTML="";
+ colors.forEach(color=>{const b=document.createElement("button");b.type="button";b.className="color-swatch";b.style.background=color;b.setAttribute("aria-label","Color "+color);b.onclick=()=>{if(!selectedTarget||!worn.has(selectedTarget))return;$("selectedColor").value=color;setWornColor(color)};box.append(b)});
+}
 function renderWorn(){
  const layer=$("characterLayer");layer.innerHTML="";
  layer.append(makeImage(BASE,"character-base","Nani Bear"));
  ["bottoms","top","dress","shoes","bag","headwear","glasses","accessory"].forEach(target=>{
-  const f=worn.get(target);if(f)layer.append(makeImage(f,"wearable wearable-"+target,label(f)));
+  const f=worn.get(target);if(f){
+   const img=makeImage(f,"wearable wearable-"+target,label(f));img.dataset.target=target;
+   img.addEventListener("click",e=>{e.stopPropagation();selectWorn(target)});
+   const color=wornColors.get(target);if(color)img.style.filter=tintFilter(color);
+   layer.append(img);
+  }
  });
+ if(selectedTarget&&!worn.has(selectedTarget))selectedTarget=null;
+ selectWorn(selectedTarget);
 }
 function beginDrag(e,file,button){
  if(e.button!==undefined&&e.button!==0)return;
@@ -196,10 +228,12 @@ function endDrag(e){
 function shuffle(){trackOrder=[...tracks].sort(()=>Math.random()-.5);trackIndex=0}
 function loadTrack(){music.src=url(trackOrder[trackIndex]);music.play().then(()=>$("playPause").textContent="⏸").catch(()=>$("playPause").textContent="▶")}
 function next(){trackIndex=(trackIndex+1)%trackOrder.length;loadTrack()}
-$("startBtn").onclick=()=>{$("intro").hidden=true;$("studio").hidden=false;try{unlockFx()}catch(e){console.warn("Sound effects unavailable:",e)}shuffle();try{loadTrack()}catch(e){console.warn("Music unavailable:",e)}renderBackgrounds();renderCategories();renderItems();renderWorn()};
+$("startBtn").onclick=()=>{$("intro").hidden=true;$("studio").hidden=false;try{unlockFx()}catch(e){console.warn("Sound effects unavailable:",e)}shuffle();try{loadTrack()}catch(e){console.warn("Music unavailable:",e)}renderBackgrounds();renderCategories();renderItems();renderColorSwatches();renderWorn()};
 $("nextTrack").onclick=()=>{playFx("tap");next()};
 $("prevTrack").onclick=()=>{playFx("tap");trackIndex=(trackIndex-1+trackOrder.length)%trackOrder.length;loadTrack()};
 $("playPause").onclick=()=>{playFx("tap");if(music.paused){music.play();$("playPause").textContent="⏸"}else{music.pause();$("playPause").textContent="▶"}};
 $("muteBtn").onclick=()=>{playFx("tap");music.muted=!music.muted;$("muteBtn").textContent=music.muted?"🔇":"🔊"};
 music.addEventListener("ended",next);
-$("resetBtn").onclick=()=>{playFx("sparkle");worn.clear();renderItems();renderWorn()};
+$("selectedColor").addEventListener("input",e=>setWornColor(e.target.value));
+$("clearColor").onclick=()=>{if(!selectedTarget)return;wornColors.delete(selectedTarget);const img=$("characterLayer").querySelector('[data-target="'+selectedTarget+'"]');if(img)img.style.filter="";$("selectedColor").value="#ff70c8"};
+$("resetBtn").onclick=()=>{playFx("sparkle");worn.clear();wornColors.clear();selectedTarget=null;renderItems();renderWorn()};
