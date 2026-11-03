@@ -1,6 +1,7 @@
-// Load artwork and audio from the same GitHub Pages site as the game.
-// This avoids cross-host raw.githubusercontent.com path and caching issues.
-const url=n=>"./"+encodeURIComponent(n);
+// Resolve assets from the folder containing this script, not the browser page URL.
+// This remains correct if GitHub Pages serves the game from a nested project path.
+const ASSET_BASE = new URL(".", document.currentScript.src);
+const url = n => new URL(encodeURIComponent(n), ASSET_BASE).href;
 const BASE="Nani Base model.PNG";
 
 const backgrounds=[
@@ -64,18 +65,19 @@ function equip(file){
 }
 function makeImage(file,cls,alt){
  const im=document.createElement("img");im.className=cls;im.alt=alt||"";im.draggable=false;im.src=url(file);
- im.onerror=()=>{im.remove()};return im;
+ im.onerror=()=>{const msg=document.createElement("div");msg.className="asset-error";msg.textContent="Could not load: "+file; if(cls==="character-base"){$("characterLayer").append(msg)} else if(cls.startsWith("wearable")){$("characterLayer").append(msg)} else {im.replaceWith(msg)}};return im;
 }
 function renderBackgrounds(){
  const box=$("backgrounds");box.innerHTML="";
  backgrounds.forEach((f,i)=>{
   const b=document.createElement("button");b.className="background-choice"+(!i?" active":"");
   b.innerHTML='<img alt=""><span>'+label(f)+'</span>';
-  const im=b.querySelector("img");im.src=url(f);im.onerror=()=>b.remove();
+  const im=b.querySelector("img");im.src=url(f);im.onerror=()=>{im.alt="Image failed";b.classList.add("asset-missing");b.querySelector("span").textContent=label(f)+" (not loading)"};
   b.onclick=()=>{box.querySelectorAll("button").forEach(x=>x.classList.remove("active"));b.classList.add("active");$("scene").src=url(f)};
   box.append(b);
  });
  $("scene").src=url(backgrounds[0]);
+ $("scene").onerror=()=>{const msg=document.createElement("div");msg.className="asset-error scene-error";msg.textContent="Background image did not load: "+backgrounds[0];$("stage").append(msg)};
 }
 function renderCategories(){
  const cats=["All","Princess","Punk Rock","Urban","Runway","Beach","Shoes","Accessories"];
