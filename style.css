@@ -192,3 +192,58 @@
   .item-choice span{font-size:.52rem;line-height:1.05}
   .reset{flex:0 0 auto;margin:1px 0 0;padding:5px;font-size:.65rem}
 }
+
+
+/* Mobile vertical composition: Nani's full character screen ABOVE the selections */
+@media(max-width:760px){
+  .workspace{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+    overflow:hidden;
+    min-height:0;
+  }
+  .stage-wrap{
+    position:relative;
+    inset:auto;
+    flex:1 1 58%;
+    min-height:0;
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .stage{
+    position:relative;
+    inset:auto;
+    width:100%;
+    height:100%;
+    max-height:none;
+    min-height:0;
+    aspect-ratio:auto;
+    border-radius:15px;
+  }
+  .character-layer{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
+  .character-layer img{position:absolute;height:96%;width:auto;max-width:94%;bottom:0;object-fit:contain}
+  .sidebar{
+    position:relative;
+    inset:auto;
+    flex:0 0 40%;
+    width:100%;
+    height:40%;
+    max-height:40%;
+    min-height:0;
+    overflow:hidden;
+    padding:7px 8px;
+    border:1px solid #e8b5df;
+    border-radius:14px;
+    background:rgba(255,248,253,.97);
+    backdrop-filter:blur(7px);
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    box-shadow:0 3px 18px #54204b20;
+  }
+  .hint{display:none}
+}
