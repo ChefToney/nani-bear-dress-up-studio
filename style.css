@@ -93,3 +93,64 @@
   .item-choice span{font-size:.52rem;line-height:1.05}
   .reset{flex:0 0 auto;margin:1px 0 0;padding:5px;font-size:.65rem}
 }
+
+
+/* Keep Nani fully visible beside the picker on narrow screens */
+@media(max-width:760px){
+  .workspace{
+    position:relative;
+    display:grid;
+    grid-template-columns:minmax(0, .92fr) minmax(0, 1.08fr);
+    grid-template-rows:minmax(0, 1fr);
+    grid-template-areas:"character picker";
+    gap:7px;
+    overflow:hidden;
+    min-height:0;
+  }
+  .stage-wrap{
+    position:relative;
+    inset:auto;
+    grid-area:character;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-width:0;
+    min-height:0;
+  }
+  .stage{
+    position:relative;
+    width:100%;
+    height:auto;
+    aspect-ratio:4/5;
+    max-height:72svh;
+    min-height:0;
+    overflow:hidden;
+  }
+  .character-layer{inset:0;display:flex;align-items:flex-end;justify-content:center}
+  .character-layer img{
+    position:absolute;
+    height:94%;
+    width:auto;
+    max-width:92%;
+    bottom:0;
+    object-fit:contain;
+  }
+  .sidebar{
+    position:relative;
+    inset:auto;
+    grid-area:picker;
+    width:100%;
+    height:100%;
+    max-height:none;
+    min-height:0;
+    overflow:hidden;
+    padding:7px;
+    border-radius:13px;
+    background:#fff;
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+  }
+  .item-list{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .hint{display:none}
+}
