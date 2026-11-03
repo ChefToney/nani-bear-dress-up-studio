@@ -89,3 +89,44 @@
   .item-choice span{display:block;font-size:.57rem;line-height:1.15;text-align:center;overflow-wrap:anywhere}
   .reset{flex:0 0 auto;width:100%;margin:1px 0 0;padding:7px;font-size:.68rem}
 }
+
+
+/* Fashion studio polish + individual placed-item color editor */
+body{background:radial-gradient(ellipse at 15% 0%,#ffe0f6 0,transparent 42%),linear-gradient(135deg,#fff8fd,#f8e9ff 55%,#fff1f8)}
+.studio{max-width:1600px;margin:0 auto}
+.studio header{padding:10px 14px;border:1px solid #f1c4e8;border-radius:18px;background:linear-gradient(110deg,#fff,#fff0fb);box-shadow:0 6px 22px #7e3a7512}
+.studio h1{letter-spacing:-.035em;background:linear-gradient(90deg,#762d80,#d14eaa);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sidebar{background:linear-gradient(160deg,#fff 0%,#fff8fe 70%,#fceeff);box-shadow:0 10px 30px #6a27631a}
+.stage{border:1px solid #edc0e9;box-shadow:0 14px 36px #6a276333, inset 0 0 0 1px #ffffff88}
+.category,.background-choice,.item-choice{transition:transform .16s,box-shadow .16s,border-color .16s}
+.category:active,.background-choice:active,.item-choice:active{transform:scale(.97)}
+.item-choice{box-shadow:0 3px 10px #8b4c8310}
+.item-choice.active{box-shadow:0 0 0 2px #d64fba55,0 5px 15px #d64fba22}
+.color-editor{flex:0 0 auto;margin-top:8px;padding:10px;border:1px solid #edc2e9;border-radius:14px;background:linear-gradient(135deg,#fff,#fff0fa);box-shadow:0 4px 14px #7d347010}
+.color-editor-heading{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.color-editor-heading>span{font-size:1.35rem}
+.color-editor-heading strong,.color-editor-heading small{display:block}
+.color-editor-heading strong{font-size:.82rem;color:#71306e}
+.color-editor-heading small{font-size:.68rem;color:#98658f}
+.color-tools{display:flex;align-items:center;gap:7px;min-width:0}
+#selectedColor{width:34px;height:32px;padding:2px;border:1px solid #e6b7dc;border-radius:9px;background:#fff;flex:0 0 auto}
+#selectedColor:disabled{opacity:.45}
+.color-swatches{display:flex;gap:5px;flex:1;min-width:0;flex-wrap:wrap}
+.color-swatch{width:19px;height:19px;border:2px solid white;border-radius:50%;box-shadow:0 0 0 1px #d9b2d4; padding:0}
+.color-swatch:active{transform:scale(.9)}
+#clearColor{flex:0 0 auto;padding:6px 8px;border:1px solid #e8c3e2;border-radius:9px;background:#fff;color:#793c76;font-size:.68rem;font-weight:800}
+.character-layer img.wearable{pointer-events:auto;cursor:pointer;transition:filter .16s}
+.character-layer img.wearable.selected-wearable{filter:drop-shadow(0 0 5px #ff62c8) drop-shadow(0 0 2px white)}
+@media(max-width:760px){
+ .studio header{background:linear-gradient(110deg,#fff,#fff0fb);box-shadow:0 3px 12px #7e3a7512}
+ .sidebar{box-shadow:0 3px 12px #54204b18}
+ .color-editor{padding:6px;margin-top:1px;border-radius:10px}
+ .color-editor-heading{gap:5px;margin-bottom:4px}
+ .color-editor-heading>span{font-size:1rem}
+ .color-editor-heading strong{font-size:.66rem}
+ .color-editor-heading small{font-size:.55rem;line-height:1.1}
+ .color-tools{gap:4px}
+ #selectedColor{width:27px;height:25px}
+ .color-swatch{width:15px;height:15px}
+ #clearColor{font-size:.58rem;padding:5px}
+}
