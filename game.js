@@ -3,6 +3,27 @@
 const ASSET_BASE = new URL(".", document.currentScript.src);
 const url = n => new URL(encodeURIComponent(n), ASSET_BASE).href;
 const BASE="Nani Base model.PNG";
+// Expressive, lightweight magic burst layered over the character stage.
+function magicPoof(x,y,flavor="pink"){
+ const stage=$("stage");if(!stage)return;
+ const r=stage.getBoundingClientRect();
+ const burst=document.createElement("div");
+ burst.className="magic-poof "+(flavor==="gold"?"magic-gold":"");
+ burst.style.left=(x==null?50:(x-r.left)/r.width*100)+"%";
+ burst.style.top=(y==null?46:(y-r.top)/r.height*100)+"%";
+ const glyphs=["✦","✧","✺","✧","✦","•","✧"];
+ glyphs.forEach((glyph,i)=>{
+  const bit=document.createElement("span");
+  bit.className="magic-bit bit-"+i;
+  bit.textContent=glyph;
+  burst.append(bit);
+ });
+ const cloud=document.createElement("span");cloud.className="magic-cloud";burst.append(cloud);
+ stage.append(burst);
+ burst.addEventListener("animationend",()=>burst.remove(),{once:true});
+ setTimeout(()=>burst.remove(),950);
+}
+
 
 const backgrounds=[
  "Background Beach.PNG",
@@ -99,7 +120,7 @@ function renderBackgrounds(){
   const b=document.createElement("button");b.className="background-choice"+(!i?" active":"");
   b.innerHTML='<img alt=""><span>'+label(f)+'</span>';
   const im=b.querySelector("img");im.src=url(f);im.onerror=()=>{im.alt="Image failed";b.classList.add("asset-missing");b.querySelector("span").textContent=label(f)+" (not loading)"};
-  b.onclick=()=>{playFx("sparkle");box.querySelectorAll("button").forEach(x=>x.classList.remove("active"));b.classList.add("active");$("scene").src=url(f)};
+  b.onclick=()=>{const r=$("stage").getBoundingClientRect();magicPoof(r.left+r.width*.5,r.top+r.height*.46,"gold");playFx("sparkle");box.querySelectorAll("button").forEach(x=>x.classList.remove("active"));b.classList.add("active");$("scene").src=url(f)};
   box.append(b);
  });
  $("scene").src=url(backgrounds[0]);
@@ -110,7 +131,7 @@ function renderCategories(){
  const box=$("categories");box.innerHTML="";
  cats.forEach(c=>{
   const b=document.createElement("button");b.className="category"+(c==="All"?" active":"");b.textContent=c;
-  b.onclick=()=>{playFx("tap");activeCategory=c;box.querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b));renderItems()};
+  b.onclick=()=>{magicPoof(null,null,"gold");playFx("tap");activeCategory=c;box.querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b));renderItems()};
   box.append(b);
  });
 }
@@ -174,4 +195,4 @@ $("prevTrack").onclick=()=>{playFx("tap");trackIndex=(trackIndex-1+trackOrder.le
 $("playPause").onclick=()=>{playFx("tap");if(music.paused){music.play();$("playPause").textContent="⏸"}else{music.pause();$("playPause").textContent="▶"}};
 $("muteBtn").onclick=()=>{playFx("tap");music.muted=!music.muted;$("muteBtn").textContent=music.muted?"🔇":"🔊"};
 music.addEventListener("ended",next);
-$("resetBtn").onclick=()=>{playFx("sparkle");worn.clear();renderItems();renderWorn()};
+$("resetBtn").onclick=()=>{magicPoof(null,null,"gold");playFx("sparkle");worn.clear();renderItems();renderWorn()};
