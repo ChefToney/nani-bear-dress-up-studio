@@ -32,6 +32,32 @@ const assets=[
 const tracks=["KA_HU_TI PT2.mp3","KA_HU_TI.mp3","Move_Pose.mp3","Move_Pose_Stop.mp3","Nani_Bear_Runway(1).mp3","Pah! PT2.mp3","Pah!.mp3"];
 const $=id=>document.getElementById(id), music=$("music");
 let trackOrder=[],trackIndex=0,activeCategory="All",worn=new Map(),dragState=null,justDragged=false;
+let fxContext=null,fxEnabled=true;
+function unlockFx(){
+ const AudioCtx=window.AudioContext||window.webkitAudioContext;
+ if(!AudioCtx)return;
+ if(!fxContext)fxContext=new AudioCtx();
+ if(fxContext.state==="suspended")fxContext.resume();
+}
+function playFx(kind="tap"){
+ if(!fxEnabled||!fxContext||fxContext.state!=="running")return;
+ const now=fxContext.currentTime;
+ const patterns={
+  tap:[[520,0,.045,"sine",.035]],
+  pop:[[420,0,.07,"triangle",.055],[690,.045,.085,"sine",.035]],
+  sparkle:[[880,0,.10,"sine",.045],[1175,.075,.12,"sine",.035],[1568,.15,.16,"sine",.025]],
+  bling:[[1046,0,.09,"sine",.045],[1568,.08,.14,"sine",.035]]
+ };
+ (patterns[kind]||patterns.tap).forEach(([hz,delay,duration,wave,volume])=>{
+  const osc=fxContext.createOscillator(),gain=fxContext.createGain();
+  osc.type=wave;osc.frequency.setValueAtTime(hz,now+delay);
+  gain.gain.setValueAtTime(.0001,now+delay);
+  gain.gain.exponentialRampToValueAtTime(volume,now+delay+.012);
+  gain.gain.exponentialRampToValueAtTime(.0001,now+delay+duration);
+  osc.connect(gain);gain.connect(fxContext.destination);
+  osc.start(now+delay);osc.stop(now+delay+duration+.015);
+ });
+}
 
 function category(file){
  const s=file.toLowerCase();
@@ -73,7 +99,7 @@ function renderBackgrounds(){
   const b=document.createElement("button");b.className="background-choice"+(!i?" active":"");
   b.innerHTML='<img alt=""><span>'+label(f)+'</span>';
   const im=b.querySelector("img");im.src=url(f);im.onerror=()=>{im.alt="Image failed";b.classList.add("asset-missing");b.querySelector("span").textContent=label(f)+" (not loading)"};
-  b.onclick=()=>{box.querySelectorAll("button").forEach(x=>x.classList.remove("active"));b.classList.add("active");$("scene").src=url(f)};
+  b.onclick=()=>{playFx("sparkle");box.querySelectorAll("button").forEach(x=>x.classList.remove("active"));b.classList.add("active");$("scene").src=url(f)};
   box.append(b);
  });
  $("scene").src=url(backgrounds[0]);
@@ -84,7 +110,7 @@ function renderCategories(){
  const box=$("categories");box.innerHTML="";
  cats.forEach(c=>{
   const b=document.createElement("button");b.className="category"+(c==="All"?" active":"");b.textContent=c;
-  b.onclick=()=>{activeCategory=c;box.querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b));renderItems()};
+  b.onclick=()=>{playFx("tap");activeCategory=c;box.querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b));renderItems()};
   box.append(b);
  });
 }
@@ -142,10 +168,10 @@ function endDrag(e){
 function shuffle(){trackOrder=[...tracks].sort(()=>Math.random()-.5);trackIndex=0}
 function loadTrack(){music.src=url(trackOrder[trackIndex]);music.play().then(()=>$("playPause").textContent="⏸").catch(()=>$("playPause").textContent="▶")}
 function next(){trackIndex=(trackIndex+1)%trackOrder.length;loadTrack()}
-$("startBtn").onclick=()=>{$("intro").hidden=true;$("studio").hidden=false;shuffle();loadTrack();renderBackgrounds();renderCategories();renderItems();renderWorn()};
-$("nextTrack").onclick=next;
-$("prevTrack").onclick=()=>{trackIndex=(trackIndex-1+trackOrder.length)%trackOrder.length;loadTrack()};
-$("playPause").onclick=()=>{if(music.paused){music.play();$("playPause").textContent="⏸"}else{music.pause();$("playPause").textContent="▶"}};
-$("muteBtn").onclick=()=>{music.muted=!music.muted;$("muteBtn").textContent=music.muted?"🔇":"🔊"};
+$("startBtn").onclick=()=>{unlockFx();playFx("sparkle");$("intro").hidden=true;$("studio").hidden=false;shuffle();loadTrack();renderBackgrounds();renderCategories();renderItems();renderWorn()};
+$("nextTrack").onclick=()=>{playFx("tap");next()};
+$("prevTrack").onclick=()=>{playFx("tap");trackIndex=(trackIndex-1+trackOrder.length)%trackOrder.length;loadTrack()};
+$("playPause").onclick=()=>{playFx("tap");if(music.paused){music.play();$("playPause").textContent="⏸"}else{music.pause();$("playPause").textContent="▶"}};
+$("muteBtn").onclick=()=>{playFx("tap");music.muted=!music.muted;$("muteBtn").textContent=music.muted?"🔇":"🔊"};
 music.addEventListener("ended",next);
-$("resetBtn").onclick=()=>{worn.clear();renderItems();renderWorn()};
+$("resetBtn").onclick=()=>{playFx("sparkle");worn.clear();renderItems();renderWorn()};
