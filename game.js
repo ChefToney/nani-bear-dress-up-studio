@@ -196,7 +196,7 @@ function endDrag(e){
 function shuffle(){trackOrder=[...tracks].sort(()=>Math.random()-.5);trackIndex=0}
 function loadTrack(){music.src=url(trackOrder[trackIndex]);music.play().then(()=>$("playPause").textContent="⏸").catch(()=>$("playPause").textContent="▶")}
 function next(){trackIndex=(trackIndex+1)%trackOrder.length;loadTrack()}
-$("startBtn").onclick=()=>{unlockFx();$("intro").hidden=true;$("studio").hidden=false;shuffle();loadTrack();renderBackgrounds();renderCategories();renderItems();renderWorn()};
+$("startBtn").onclick=()=>{$("intro").hidden=true;$("studio").hidden=false;try{unlockFx()}catch(e){console.warn("Sound effects unavailable:",e)}shuffle();try{loadTrack()}catch(e){console.warn("Music unavailable:",e)}renderBackgrounds();renderCategories();renderItems();renderWorn()};
 $("nextTrack").onclick=()=>{playFx("tap");next()};
 $("prevTrack").onclick=()=>{playFx("tap");trackIndex=(trackIndex-1+trackOrder.length)%trackOrder.length;loadTrack()};
 $("playPause").onclick=()=>{playFx("tap");if(music.paused){music.play();$("playPause").textContent="⏸"}else{music.pause();$("playPause").textContent="▶"}};
