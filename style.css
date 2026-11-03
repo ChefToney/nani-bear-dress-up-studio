@@ -12,357 +12,80 @@
 .asset-error{position:absolute;z-index:30;left:8px;right:8px;top:8px;padding:10px 12px;border-radius:10px;background:#fff0f0;color:#8b1d1d;border:1px solid #d66;font-size:12px;font-weight:800;overflow-wrap:anywhere;pointer-events:none}.scene-error{top:auto;bottom:8px}.asset-missing{border-color:#d66!important;color:#8b1d1d!important}
 
 
-/* iPhone single-screen studio: keep Nani visible beside the outfit picker */
-@media(max-width:760px){
-  html,body{height:100%;overflow:hidden}
-  .studio{height:100svh;min-height:0;padding:8px;display:flex;flex-direction:column;overflow:hidden}
-  .studio header{flex:0 0 auto;flex-wrap:nowrap;gap:6px;margin-bottom:8px;min-width:0}
-  .studio header .eyebrow{display:none}
-  .studio h1{font-size:clamp(.78rem,3.4vw,1.05rem);line-height:1.15}
-  .music-controls{gap:3px;flex-shrink:0}
-  .music-controls button{padding:7px 8px;border-radius:9px;font-size:.85rem}
-  .workspace{flex:1;min-height:0;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:8px}
-  .stage-wrap{order:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
-  .stage{width:100%;height:auto;aspect-ratio:4/5;min-height:0;max-height:58svh}
-  .hint{font-size:.68rem;line-height:1.2;margin:6px 0 0}
-  .sidebar{order:2;min-height:0;max-height:none;overflow:hidden;padding:8px;border-radius:14px;display:flex;flex-direction:column;gap:5px}
-  .sidebar h2{font-size:.78rem;margin:2px 0 4px}
-  .background-list{display:flex;flex:0 0 auto;overflow-x:auto;gap:5px;padding-bottom:3px;scrollbar-width:thin}
-  .background-choice{flex:0 0 70px;min-width:70px;padding:4px;border-radius:8px}
-  .background-choice span{font-size:.58rem;line-height:1.1}
-  .sidebar hr{flex:0 0 auto;margin:3px 0}
-  .category-list{flex:0 0 auto;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;gap:4px;margin:0;padding-bottom:4px;scrollbar-width:thin}
-  .category{flex:0 0 auto;padding:6px 8px;font-size:.68rem;white-space:nowrap}
-  .item-list{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;grid-template-columns:repeat(3,minmax(0,1fr));align-content:start;gap:5px;padding:1px 2px 5px;overscroll-behavior:contain}
-  .item-choice{min-width:0;padding:4px;border-radius:9px}
-  .item-choice img{width:100%;height:auto;aspect-ratio:1;object-fit:contain}
-  .item-choice span{font-size:.56rem;line-height:1.1;min-height:1.2em}
-  .reset{flex:0 0 auto;margin-top:2px;padding:7px;font-size:.72rem}
-}
 
-
-/* Explicit split-screen layout: character and outfit picker stay visible together */
+/* Clean, single-pass phone layout: character and tappable wardrobe side by side */
 @media(max-width:760px){
-  .workspace{
-    display:grid;
-    grid-template-columns:minmax(0, .88fr) minmax(0, 1.12fr);
-    grid-template-rows:minmax(0,1fr);
-    grid-template-areas:"character picker";
-    align-items:stretch;
-    min-height:0;
+  html,body{height:100%;min-height:100%;overflow:hidden}
+  .studio{
+    height:100svh;min-height:0;padding:7px;
+    display:flex;flex-direction:column;overflow:hidden
   }
-  .stage-wrap{grid-area:character;min-height:0;align-self:center}
-  .sidebar{grid-area:picker;width:100%;height:100%;min-height:0;max-height:none}
-  .stage{width:100%;max-height:54svh;min-height:0;aspect-ratio:4/5}
-  .item-list{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .background-choice{flex-basis:62px;min-width:62px}
-}
-
-
-/* Revised iPhone layout: full-width character stage with outfit picker floating inside it */
-@media(max-width:760px){
-  .studio{height:100svh;min-height:0;padding:8px;display:flex;flex-direction:column;overflow:hidden}
-  .studio header{flex:0 0 auto;flex-wrap:nowrap;gap:5px;margin:0 0 6px;min-width:0}
-  .studio header .eyebrow{display:none}
-  .studio h1{font-size:clamp(.78rem,3.5vw,1.05rem);line-height:1.1}
-  .music-controls{gap:3px;flex-shrink:0}
-  .music-controls button{padding:6px 7px;font-size:.8rem}
-  .workspace{position:relative;display:block;flex:1;min-height:0;width:100%;overflow:hidden}
-  .stage-wrap{position:absolute;inset:0;display:block;min-width:0}
-  .stage{width:100%;height:100%;max-height:none;min-height:0;aspect-ratio:auto;border-radius:16px}
-  .character-layer img{height:66%;max-width:88%;bottom:35%}
-  .hint{display:none}
-  .sidebar{
-    position:absolute;z-index:40;left:7px;right:7px;bottom:7px;
-    width:auto;height:38%;max-height:38%;min-height:0;overflow:hidden;
-    padding:7px 8px;border:1px solid #e8b5df;border-radius:15px;
-    background:rgba(255,248,253,.96);backdrop-filter:blur(8px);
-    display:flex;flex-direction:column;gap:4px;
-    box-shadow:0 3px 18px #54204b30;
+  .studio header{
+    flex:0 0 auto;display:flex;flex-wrap:nowrap;align-items:center;
+    gap:5px;margin:0 0 7px;min-width:0
   }
-  .sidebar h2{font-size:.72rem;margin:1px 0 3px}
-  .background-list{display:flex;flex:0 0 auto;overflow-x:auto;gap:5px;padding-bottom:2px}
-  .background-choice{flex:0 0 58px;min-width:58px;padding:3px;border-radius:8px}
-  .background-choice span{font-size:.54rem;line-height:1}
-  .sidebar hr{flex:0 0 auto;margin:2px 0}
-  .category-list{display:flex;flex:0 0 auto;flex-wrap:nowrap;overflow-x:auto;gap:4px;margin:0;padding-bottom:3px}
-  .category{flex:0 0 auto;padding:5px 7px;font-size:.64rem;white-space:nowrap}
-  .item-list{display:grid;flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;grid-template-columns:repeat(4,minmax(0,1fr));align-content:start;gap:4px;padding:1px 2px 4px}
-  .item-choice{min-width:0;padding:3px;border-radius:8px}
-  .item-choice img{width:100%;height:auto;aspect-ratio:1;object-fit:contain}
-  .item-choice span{font-size:.52rem;line-height:1.05}
-  .reset{flex:0 0 auto;margin:1px 0 0;padding:5px;font-size:.65rem}
-}
-
-
-/* Keep Nani fully visible beside the picker on narrow screens */
-@media(max-width:760px){
+  .studio header .eyebrow{display:none}
+  .studio h1{font-size:clamp(.72rem,3.2vw,.98rem);line-height:1.1}
+  .music-controls{display:flex;gap:2px;flex-shrink:0}
+  .music-controls button{padding:6px 5px;font-size:.75rem;border-radius:8px}
   .workspace{
-    position:relative;
-    display:grid;
-    grid-template-columns:minmax(0, .92fr) minmax(0, 1.08fr);
-    grid-template-rows:minmax(0, 1fr);
-    grid-template-areas:"character picker";
-    gap:7px;
-    overflow:hidden;
-    min-height:0;
+    flex:1 1 auto;min-height:0;width:100%;overflow:hidden;
+    display:grid;grid-template-columns:minmax(0, .88fr) minmax(0, 1.12fr);
+    grid-template-rows:minmax(0,1fr);gap:6px;align-items:stretch
   }
   .stage-wrap{
-    position:relative;
-    inset:auto;
-    grid-area:character;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-width:0;
-    min-height:0;
+    grid-column:1;grid-row:1;position:relative;min-width:0;min-height:0;
+    display:flex;align-items:center;justify-content:center
   }
   .stage{
-    position:relative;
-    width:100%;
-    height:auto;
-    aspect-ratio:4/5;
-    max-height:72svh;
-    min-height:0;
-    overflow:hidden;
+    position:relative;width:100%;height:100%;min-height:0;max-height:none;
+    aspect-ratio:auto;border-radius:13px;overflow:hidden
   }
-  .character-layer{inset:0;display:flex;align-items:flex-end;justify-content:center}
-  .character-layer img{
-    position:absolute;
-    height:94%;
-    width:auto;
-    max-width:92%;
-    bottom:0;
-    object-fit:contain;
-  }
-  .sidebar{
-    position:relative;
-    inset:auto;
-    grid-area:picker;
-    width:100%;
-    height:100%;
-    max-height:none;
-    min-height:0;
-    overflow:hidden;
-    padding:7px;
-    border-radius:13px;
-    background:#fff;
-    display:flex;
-    flex-direction:column;
-    gap:5px;
-  }
-  .item-list{grid-template-columns:repeat(2,minmax(0,1fr));}
-  .hint{display:none}
-}
-
-
-/* Final mobile layout: outfit menu is an overlay INSIDE Nani's character screen */
-@media(max-width:760px){
-  html,body{height:100%;overflow:hidden}
-  .studio{height:100svh;min-height:0;padding:8px;display:flex;flex-direction:column;overflow:hidden}
-  .studio header{flex:0 0 auto;flex-wrap:nowrap;gap:5px;margin:0 0 6px;min-width:0}
-  .studio header .eyebrow{display:none}
-  .studio h1{font-size:clamp(.78rem,3.5vw,1.05rem);line-height:1.1}
-  .music-controls{gap:3px;flex-shrink:0}
-  .music-controls button{padding:6px 7px;font-size:.8rem}
-  .workspace{position:relative;display:block;flex:1;min-height:0;width:100%;overflow:hidden}
-  .stage-wrap{position:absolute;inset:0;display:block;min-width:0;min-height:0}
-  .stage{position:absolute;inset:0;width:100%;height:100%;max-height:none;min-height:0;aspect-ratio:auto;border-radius:16px;overflow:hidden}
-  .character-layer{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
-  .character-layer img{position:absolute;height:96%;width:auto;max-width:94%;bottom:0;object-fit:contain}
-  .hint{display:none}
-  .sidebar{
-    position:absolute;z-index:40;left:6px;right:6px;bottom:6px;
-    width:auto;height:40%;max-height:40%;min-height:0;overflow:hidden;
-    padding:7px 8px;border:1px solid #e8b5df;border-radius:14px;
-    background:rgba(255,248,253,.94);backdrop-filter:blur(7px);
-    display:flex;flex-direction:column;gap:4px;
-    box-shadow:0 3px 18px #54204b30;
-  }
-  .sidebar h2{font-size:.7rem;margin:1px 0 2px}
-  .background-list{display:flex;flex:0 0 auto;overflow-x:auto;gap:5px;padding-bottom:2px}
-  .background-choice{flex:0 0 55px;min-width:55px;padding:3px;border-radius:7px}
-  .background-choice span{font-size:.52rem;line-height:1}
-  .sidebar hr{flex:0 0 auto;margin:2px 0}
-  .category-list{display:flex;flex:0 0 auto;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;gap:4px;margin:0;padding-bottom:3px}
-  .category{flex:0 0 auto;padding:5px 7px;font-size:.62rem;white-space:nowrap}
-  .item-list{display:grid;flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;grid-template-columns:repeat(4,minmax(0,1fr));align-content:start;gap:4px;padding:1px 2px 4px;overscroll-behavior:contain}
-  .item-choice{min-width:0;padding:3px;border-radius:8px}
-  .item-choice img{width:100%;height:auto;aspect-ratio:1;object-fit:contain}
-  .item-choice span{font-size:.52rem;line-height:1.05}
-  .reset{flex:0 0 auto;margin:1px 0 0;padding:5px;font-size:.65rem}
-}
-
-
-/* Mobile vertical composition: Nani's full character screen ABOVE the selections */
-@media(max-width:760px){
-  .workspace{
-    position:relative;
-    display:flex;
-    flex-direction:column;
-    gap:7px;
-    overflow:hidden;
-    min-height:0;
-  }
-  .stage-wrap{
-    position:relative;
-    inset:auto;
-    flex:1 1 58%;
-    min-height:0;
-    width:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .stage{
-    position:relative;
-    inset:auto;
-    width:100%;
-    height:100%;
-    max-height:none;
-    min-height:0;
-    aspect-ratio:auto;
-    border-radius:15px;
-  }
-  .character-layer{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
-  .character-layer img{position:absolute;height:96%;width:auto;max-width:94%;bottom:0;object-fit:contain}
-  .sidebar{
-    position:relative;
-    inset:auto;
-    flex:0 0 40%;
-    width:100%;
-    height:40%;
-    max-height:40%;
-    min-height:0;
-    overflow:hidden;
-    padding:7px 8px;
-    border:1px solid #e8b5df;
-    border-radius:14px;
-    background:rgba(255,248,253,.97);
-    backdrop-filter:blur(7px);
-    display:flex;
-    flex-direction:column;
-    gap:4px;
-    box-shadow:0 3px 18px #54204b20;
-  }
-  .hint{display:none}
-}
-
-
-/* Floating outfit tray over a full-size character stage */
-@media(max-width:760px){
-  .workspace{
-    position:relative!important;
-    display:block!important;
-    flex:1 1 auto!important;
-    min-height:0!important;
-    width:100%!important;
-    overflow:hidden!important;
-  }
-  .stage-wrap{
-    position:absolute!important;
-    inset:0!important;
-    display:block!important;
-    width:100%!important;
-    height:100%!important;
-    min-height:0!important;
-  }
-  .stage{
-    position:absolute!important;
-    inset:0!important;
-    width:100%!important;
-    height:100%!important;
-    max-height:none!important;
-    min-height:0!important;
-    aspect-ratio:auto!important;
-    overflow:hidden!important;
-    border-radius:16px!important;
-  }
-  .scene{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important}
+  .scene{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   .character-layer{
-    position:absolute!important;
-    z-index:2!important;
-    inset:0!important;
-    display:flex!important;
-    align-items:flex-end!important;
-    justify-content:center!important;
-    pointer-events:none!important;
+    position:absolute;inset:0;display:flex;align-items:flex-end;
+    justify-content:center;pointer-events:none
   }
   .character-layer img{
-    position:absolute!important;
-    height:100%!important;
-    width:auto!important;
-    max-width:100%!important;
-    max-height:100%!important;
-    bottom:0!important;
-    object-fit:contain!important;
+    position:absolute;height:94%;width:100%;max-width:100%;max-height:100%;
+    bottom:0;object-fit:contain
   }
+  .hint{display:none}
   .sidebar{
-    position:absolute!important;
-    z-index:5!important;
-    left:6px!important;
-    right:6px!important;
-    bottom:6px!important;
-    top:auto!important;
-    width:auto!important;
-    height:36%!important;
-    flex:none!important;
-    max-height:36%!important;
-    min-height:0!important;
-    overflow:hidden!important;
-    padding:7px 8px!important;
-    border:1px solid #e8b5df!important;
-    border-radius:14px!important;
-    background:rgba(255,248,253,.88)!important;
-    backdrop-filter:blur(5px)!important;
-    box-shadow:0 3px 18px #54204b30!important;
-    display:flex!important;
-    flex-direction:column!important;
-    gap:4px!important;
+    grid-column:2;grid-row:1;position:relative;inset:auto;
+    width:100%;height:100%;min-width:0;min-height:0;max-height:none;
+    overflow:hidden;padding:6px;border:1px solid #e8b5df;border-radius:12px;
+    background:rgba(255,248,253,.98);display:flex;flex-direction:column;
+    gap:5px;box-shadow:0 2px 10px #54204b18
   }
-  .sidebar h2{font-size:.7rem!important;margin:1px 0 2px!important}
-  .background-list{display:flex!important;flex:0 0 auto!important;overflow-x:auto!important;gap:5px!important;padding-bottom:2px!important}
-  .background-choice{flex:0 0 55px!important;min-width:55px!important;padding:3px!important}
-  .background-choice span{font-size:.52rem!important;line-height:1!important}
-  .sidebar hr{flex:0 0 auto!important;margin:2px 0!important}
-  .category-list{display:flex!important;flex:0 0 auto!important;flex-wrap:nowrap!important;overflow-x:auto!important;gap:4px!important;margin:0!important;padding-bottom:3px!important}
-  .category{flex:0 0 auto!important;padding:5px 7px!important;font-size:.62rem!important;white-space:nowrap!important}
-  .item-list{display:grid!important;flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;align-content:start!important;gap:4px!important;padding:1px 2px 4px!important}
-  .item-choice{min-width:0!important;padding:3px!important}
-  .item-choice img{width:100%!important;height:auto!important;aspect-ratio:1!important;object-fit:contain!important}
-  .item-choice span{font-size:.52rem!important;line-height:1.05!important}
-  .reset{flex:0 0 auto!important;margin:1px 0 0!important;padding:5px!important;font-size:.65rem!important}
-  .hint{display:none!important}
+  .sidebar h2{flex:0 0 auto;font-size:.7rem;margin:1px 0 2px}
+  .background-list{
+    display:flex;flex:0 0 auto;overflow-x:auto;overflow-y:hidden;
+    gap:4px;padding-bottom:2px
+  }
+  .background-choice{flex:0 0 48px;min-width:48px;padding:3px;border-radius:7px}
+  .background-choice span{font-size:.5rem;line-height:1}
+  .sidebar hr{flex:0 0 auto;margin:2px 0}
+  .category-list{
+    display:flex;flex:0 0 auto;flex-wrap:nowrap;overflow-x:auto;
+    overflow-y:hidden;gap:4px;margin:0;padding:1px 0 4px;
+    -webkit-overflow-scrolling:touch
+  }
+  .category{flex:0 0 auto;padding:6px 7px;font-size:.64rem;white-space:nowrap}
+  .item-list{
+    display:grid;flex:1 1 0;min-height:0;min-width:0;
+    overflow-y:auto;overflow-x:hidden;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-auto-rows:max-content;align-content:start;gap:6px;
+    padding:2px 2px 8px;-webkit-overflow-scrolling:touch;
+    touch-action:pan-y
+  }
+  .item-choice{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    min-width:0;min-height:76px;padding:4px;border-radius:9px;
+    touch-action:manipulation
+  }
+  .item-choice img{display:block;width:100%;height:62px;aspect-ratio:1;object-fit:contain}
+  .item-choice span{display:block;font-size:.57rem;line-height:1.15;text-align:center;overflow-wrap:anywhere}
+  .reset{flex:0 0 auto;width:100%;margin:1px 0 0;padding:7px;font-size:.68rem}
 }
-
-
-/* Expressive magic poof feedback for outfit and scene selections */
-.magic-poof{
- position:absolute;z-index:12;width:1px;height:1px;pointer-events:none;
- transform:translate(-50%,-50%);animation:magic-poof-in .72s cubic-bezier(.15,.75,.25,1) both;
-}
-.magic-cloud{
- position:absolute;left:0;top:0;width:18px;height:18px;border-radius:50%;
- background:radial-gradient(circle,#fff 0 12%,#fff4ff 24%,#ffb6ed 54%,rgba(255,123,218,0) 76%);
- box-shadow:0 0 18px 9px rgba(255,157,231,.7),0 0 34px 14px rgba(209,129,255,.32);
- transform:translate(-50%,-50%) scale(.15);
- animation:magic-cloud-pop .62s cubic-bezier(.12,.8,.2,1) both;
-}
-.magic-bit{position:absolute;left:0;top:0;color:#fff7a8;font-size:22px;font-weight:900;
- text-shadow:0 0 5px #fff,0 0 12px #ff8cdb,0 2px 5px #a63d9d;
- transform:translate(-50%,-50%) scale(.2);opacity:0;
- animation:magic-spark-fly .68s cubic-bezier(.15,.75,.2,1) both;
-}
-.magic-bit.bit-0{--dx:-42px;--dy:-34px;--turn:-35deg}
-.magic-bit.bit-1{--dx:35px;--dy:-42px;--turn:55deg;animation-delay:.025s}
-.magic-bit.bit-2{--dx:48px;--dy:12px;--turn:95deg;animation-delay:.04s}
-.magic-bit.bit-3{--dx:-48px;--dy:15px;--turn:-70deg;animation-delay:.06s}
-.magic-bit.bit-4{--dx:4px;--dy:-56px;--turn:20deg;animation-delay:.02s}
-.magic-bit.bit-5{--dx:-20px;--dy:39px;--turn:80deg;animation-delay:.04s;font-size:14px}
-.magic-bit.bit-6{--dx:24px;--dy:38px;--turn:-25deg;animation-delay:.07s}
-.magic-gold .magic-cloud{background:radial-gradient(circle,#fff 0 12%,#fff9d4 24%,#ffe07a 54%,rgba(255,190,60,0) 76%);box-shadow:0 0 18px 9px rgba(255,218,112,.72),0 0 34px 14px rgba(255,166,64,.35)}
-.magic-gold .magic-bit{color:#fff3a1;text-shadow:0 0 5px #fff,0 0 12px #ffb52e,0 2px 5px #a65c19}
-@keyframes magic-poof-in{0%{opacity:0}12%{opacity:1}75%{opacity:1}100%{opacity:0}}
-@keyframes magic-cloud-pop{0%{transform:translate(-50%,-50%) scale(.12);opacity:.2}35%{transform:translate(-50%,-50%) scale(3.8);opacity:1}100%{transform:translate(-50%,-50%) scale(5.4);opacity:0}}
-@keyframes magic-spark-fly{0%{transform:translate(-50%,-50%) scale(.15) rotate(0);opacity:0}18%{opacity:1}100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.15) rotate(var(--turn));opacity:0}}
-@media(prefers-reduced-motion:reduce){.magic-poof,.magic-cloud,.magic-bit{animation-duration:.2s}}
