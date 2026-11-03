@@ -334,31 +334,3 @@
   .reset{flex:0 0 auto!important;margin:1px 0 0!important;padding:5px!important;font-size:.65rem!important}
   .hint{display:none!important}
 }
-
-
-/* iPhone portrait: keep the complete character visible above the floating tray.
-   Tablet layouts remain unchanged. */
-@media(max-width:500px) and (orientation:portrait){
-  .workspace{height:100%!important;min-height:0!important}
-  .stage-wrap,.stage{height:100%!important;min-height:0!important}
-  .character-layer img{
-    height:74%!important;
-    max-height:74%!important;
-    max-width:96%!important;
-    width:auto!important;
-    bottom:29%!important;
-    object-fit:contain!important;
-  }
-  .sidebar{
-    height:31%!important;
-    max-height:31%!important;
-    bottom:5px!important;
-    left:5px!important;
-    right:5px!important;
-    padding:6px!important;
-  }
-  .background-list{max-height:48px!important}
-  .background-choice{flex-basis:48px!important;min-width:48px!important}
-  .background-choice img{aspect-ratio:16/9!important}
-  .item-list{grid-template-columns:repeat(5,minmax(0,1fr))!important}
-}
