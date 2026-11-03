@@ -108,6 +108,12 @@ function equip(file){
   if(target==="top"||target==="bottoms")worn.delete("dress");
   worn.set(target,file);
  }
+ // The magic happens exactly where the outfit changes: around Nani.
+ const stage=$("stage"),r=stage.getBoundingClientRect();
+ const fxY=Math.max(28,Math.min(62,44+(Math.random()*10-5)));
+ magicPoof(r.left+r.width*(.5+(Math.random()-.5)*.12),r.top+r.height*fxY/100,
+   ["headwear","glasses","accessory","bag"].includes(target)?"gold":"pink");
+ playFx(target==="headwear"||target==="accessory"?"bling":"pop");
  renderItems();renderWorn();
 }
 function makeImage(file,cls,alt){
@@ -120,7 +126,7 @@ function renderBackgrounds(){
   const b=document.createElement("button");b.className="background-choice"+(!i?" active":"");
   b.innerHTML='<img alt=""><span>'+label(f)+'</span>';
   const im=b.querySelector("img");im.src=url(f);im.onerror=()=>{im.alt="Image failed";b.classList.add("asset-missing");b.querySelector("span").textContent=label(f)+" (not loading)"};
-  b.onclick=()=>{const r=$("stage").getBoundingClientRect();magicPoof(r.left+r.width*.5,r.top+r.height*.46,"gold");playFx("sparkle");box.querySelectorAll("button").forEach(x=>x.classList.remove("active"));b.classList.add("active");$("scene").src=url(f)};
+  b.onclick=()=>{playFx("sparkle");box.querySelectorAll("button").forEach(x=>x.classList.remove("active"));b.classList.add("active");$("scene").src=url(f)};
   box.append(b);
  });
  $("scene").src=url(backgrounds[0]);
@@ -131,7 +137,7 @@ function renderCategories(){
  const box=$("categories");box.innerHTML="";
  cats.forEach(c=>{
   const b=document.createElement("button");b.className="category"+(c==="All"?" active":"");b.textContent=c;
-  b.onclick=()=>{magicPoof(null,null,"gold");playFx("tap");activeCategory=c;box.querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b));renderItems()};
+  b.onclick=()=>{playFx("tap");activeCategory=c;box.querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b));renderItems()};
   box.append(b);
  });
 }
@@ -195,4 +201,4 @@ $("prevTrack").onclick=()=>{playFx("tap");trackIndex=(trackIndex-1+trackOrder.le
 $("playPause").onclick=()=>{playFx("tap");if(music.paused){music.play();$("playPause").textContent="⏸"}else{music.pause();$("playPause").textContent="▶"}};
 $("muteBtn").onclick=()=>{playFx("tap");music.muted=!music.muted;$("muteBtn").textContent=music.muted?"🔇":"🔊"};
 music.addEventListener("ended",next);
-$("resetBtn").onclick=()=>{magicPoof(null,null,"gold");playFx("sparkle");worn.clear();renderItems();renderWorn()};
+$("resetBtn").onclick=()=>{playFx("sparkle");worn.clear();renderItems();renderWorn()};
