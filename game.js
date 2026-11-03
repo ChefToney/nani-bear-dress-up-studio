@@ -37,7 +37,7 @@ function unlockFx(){
  const AudioCtx=window.AudioContext||window.webkitAudioContext;
  if(!AudioCtx)return;
  if(!fxContext)fxContext=new AudioCtx();
- if(fxContext.state==="suspended")fxContext.resume();
+ if(fxContext.state==="suspended")fxContext.resume().then(()=>playFx("sparkle")).catch(()=>{});\n else playFx("sparkle");
 }
 function playFx(kind="tap"){
  if(!fxEnabled||!fxContext||fxContext.state!=="running")return;
@@ -168,7 +168,7 @@ function endDrag(e){
 function shuffle(){trackOrder=[...tracks].sort(()=>Math.random()-.5);trackIndex=0}
 function loadTrack(){music.src=url(trackOrder[trackIndex]);music.play().then(()=>$("playPause").textContent="⏸").catch(()=>$("playPause").textContent="▶")}
 function next(){trackIndex=(trackIndex+1)%trackOrder.length;loadTrack()}
-$("startBtn").onclick=()=>{unlockFx();playFx("sparkle");$("intro").hidden=true;$("studio").hidden=false;shuffle();loadTrack();renderBackgrounds();renderCategories();renderItems();renderWorn()};
+$("startBtn").onclick=()=>{unlockFx();$("intro").hidden=true;$("studio").hidden=false;shuffle();loadTrack();renderBackgrounds();renderCategories();renderItems();renderWorn()};
 $("nextTrack").onclick=()=>{playFx("tap");next()};
 $("prevTrack").onclick=()=>{playFx("tap");trackIndex=(trackIndex-1+trackOrder.length)%trackOrder.length;loadTrack()};
 $("playPause").onclick=()=>{playFx("tap");if(music.paused){music.play();$("playPause").textContent="⏸"}else{music.pause();$("playPause").textContent="▶"}};
