@@ -1,5 +1,6 @@
-const ROOT="https://raw.githubusercontent.com/ChefToney/nani-bear-dress-up-studio/main/";
-const url=n=>ROOT+encodeURIComponent(n);
+// Load artwork and audio from the same GitHub Pages site as the game.
+// This avoids cross-host raw.githubusercontent.com path and caching issues.
+const url=n=>"./"+encodeURIComponent(n);
 const BASE="Nani Base model.PNG";
 
 const backgrounds=[
